@@ -2,17 +2,17 @@ package gradle_test;
 
 import java.net.*;
 
-import org.checkerframework.checker.mustcall.qual.CreatesMustCallFor;
+import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 
 import java.io.*;
 
-@MustCall("close")
+@MustCall({"close"})
 public class Client {
-    private @Owning Socket socket;
-    private @Owning DataInputStream input;
-    private @Owning DataOutputStream out;
+    private final @Owning Socket socket;
+    private final @Owning DataInputStream input;
+    private final @Owning DataOutputStream out;
 
     public Client() throws UnknownHostException, IOException {
         socket = new Socket("192.168.1.16", 1336);
@@ -22,14 +22,11 @@ public class Client {
         out = new DataOutputStream(socket.getOutputStream());
     }
 
-    public void close() {
-        try {
-            input.close();
-            out.close();
-            socket.close();
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+    @EnsuresCalledMethods(value={"this.socket","this.input","this.out"}, methods="close")
+    public void close() throws IOException {
+        input.close();
+        out.close();
+        socket.close();
     }
 
     // @CreatesMustCallFor("this")

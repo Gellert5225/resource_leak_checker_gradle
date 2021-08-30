@@ -17,7 +17,7 @@ public class App {
         Client client;
         try {
             client = new Client();
-            client.close();
+            //client.close();
         } catch (Exception e) {
             //TODO: handle exception
         }
